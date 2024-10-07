@@ -1,0 +1,38 @@
+[
+  {
+    "rule":
+    {
+      "apply": "any",
+      "filter":
+      [
+        {
+          "Field": "From",
+          "Predicate": "contains",
+          "Value": "gokul"
+        },
+        {
+          "Field": "Subject",
+          "Predicate": "contains",
+          "Value": "interview"
+        },
+        {
+          "Field": "Received At",
+          "Predicate": "less than",
+          "Value": "2",
+          "Metrics": "days"
+        }
+      ]
+    },
+    "action":
+    [
+      {
+        "Type": "mark",
+        "To": "read"
+      },
+      {
+        "Type": "move",
+        "To": "important"
+      }
+    ]
+  }
+]
