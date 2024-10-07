@@ -7,7 +7,7 @@
       [
         {
           "Field": "From",
-          "Predicate": "contains",
+          "Predicate": "equals",
           "Value": "gokul"
         },
         {
@@ -18,8 +18,74 @@
         {
           "Field": "Received At",
           "Predicate": "less than",
-          "Value": "2",
+          "Value": 2,
           "Metrics": "days"
+        }
+      ]
+    },
+    "action":
+    [
+      {
+        "Type": "mark",
+        "To": "read"
+      },
+      {
+        "Type": "move",
+        "To": "important"
+      }
+    ]
+  },
+  {
+    "rule":
+    {
+      "apply": "any",
+      "filter":
+      [
+        {
+          "Field": "From",
+          "Predicate": "equal",
+          "Value": "gokul"
+        },
+        {
+          "Field": "Subject",
+          "Predicate": "contains",
+          "Value": "interview"
+        },
+        {
+          "Field": "Received At",
+          "Predicate": "less than",
+          "Value": 2,
+          "Metrics": "days"
+        }
+      ]
+    },
+    "action":
+    [
+      {
+        "Type": "mark",
+        "To": "read"
+      },
+      {
+        "Type": "move",
+        "To": "important"
+      }
+    ]
+  },
+  {
+    "rule":
+    {
+      "apply": "any",
+      "filter":
+      [
+        {
+          "Field": "From",
+          "Predicate": "does not equals",
+          "Value": "gokul"
+        },
+        {
+          "Field": "Subject",
+          "Predicate": "not contains",
+          "Value": "interview"
         }
       ]
     },
