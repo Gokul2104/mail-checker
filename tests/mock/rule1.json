@@ -62,7 +62,7 @@
     "action":
     [
       {
-        "Type": "mark",
+        "Type": "marks",
         "To": "read"
       },
       {
@@ -98,6 +98,10 @@
       {
         "Type": "move",
         "To": "important"
+      },
+      {
+        "Type": "move",
+        "To": "local"
       }
     ]
   }

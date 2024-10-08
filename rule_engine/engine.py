@@ -1,3 +1,5 @@
+from mail import ReadActions, WriteActions
+from rule_engine.action_field import MarkAction, MoveAction
 from rule_engine.filter_field import FromField, ToField, SubjectField, MessageField, ReceivedAtField, FilterField
 from session.base import BaseSession
 
@@ -7,6 +9,10 @@ field_map = {
     "Subject": SubjectField,
     "Message": MessageField,
     "Received At": ReceivedAtField
+}
+action_map = {
+    "mark": MarkAction,
+    "move": MoveAction
 }
 
 
@@ -29,7 +35,7 @@ class RuleEngine:
         :return:
         """
         cond = " and " if self.apply == "all" else " or "
-        base_query = "select * from mail_info where "
+        base_query = "select DISTINCT(thread_id) from mail_info where "
         for curr_filter in self.filter:
             field_cls = field_map.get(curr_filter["Field"], None)
             if not field_cls:
@@ -39,8 +45,25 @@ class RuleEngine:
         return base_query
 
     def execute(self):
-        return self.__session.query(self.generate_query())
+        """
+        Return all the thread ids of the current matching message
+        if we need to use between thread,message ids update here as well as the query
+        :return:
+        """
+        data = self.__session.query(self.generate_query())
+        thread_ids = [i[0] for i in data]
+        return thread_ids
 
 
 class ActionEngine:
-    pass
+    def __init__(self, actions: list, r_provider: ReadActions, w_provider: WriteActions):
+        self.__actions = actions
+        self.__w_provider = w_provider
+        self.__r_provider = r_provider
+
+    def execute(self, thread_ids):
+        for action in self.__actions:
+            action_cls = action_map.get(action["Type"], None)
+            if not action_cls:
+                raise AttributeError(f"Unsupported action f{action['Type']}")
+            action_cls(action, reader=self.__r_provider, writer=self.__w_provider).execute(thread_ids)

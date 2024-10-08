@@ -25,7 +25,7 @@ class FilterField(BaseField, ABC):
 
     @abstractmethod
     def _generate_filter(self):
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def execute(self):
         self._validate()

@@ -10,4 +10,8 @@
     1) Create Credentials for Oauth in Google
     2) Download the credentials and update the path of cred_file in config.py
 
+## How to write rules
 
+## Setup info
+
+## How to run

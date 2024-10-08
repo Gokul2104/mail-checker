@@ -6,4 +6,4 @@ class BaseField(ABC):
         self._data = data
 
     def _validate(self):
-        raise NotImplemented()
+        raise NotImplementedError()

@@ -20,7 +20,7 @@ class BaseSession:
         """
         return self.__client.execute(create_table)
 
-    def insert(self, _id: str, subject: str, message: str, _from: str, _to: str, received_at: int):
+    def insert(self, _id: str, subject: str, message: str, _from: str, _to: str, received_at: int, thread_id: str):
         """
         :param _id:
         :param name:
@@ -29,10 +29,11 @@ class BaseSession:
         :param _from:
         :param _to:
         :param received_at:
+        :param thread_id:
         :return:
         """
         insert_query = insert_data.format(_id=_id, subject=subject, message=message,
-                                          _from=_from, _to=_to, received_at=received_at
+                                          _from=_from, _to=_to, received_at=received_at, thread_id=thread_id
                                           )
         return self.__client.execute(insert_query)
 

@@ -20,5 +20,8 @@ class DateTimeFieldConstant:
 
 
 class MarkActionConstant:
-    ALLOWED_TO = ('read', 'unread')
+    READ = "read"
+    UNREAD = "unread"
+    ALLOWED_TO = (READ, UNREAD)
+
 
