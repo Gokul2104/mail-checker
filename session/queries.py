@@ -21,5 +21,5 @@ create_table = """CREATE TABLE IF NOT EXISTS mail_info (
 
 insert_data = """
 insert into mail_info (_id, subject, message, _from, _to, received_at, thread_id) values
- ("{_id}", "{subject}", "{message}", "{_from}", "{_to}", {received_at}, "{thread_id}");
+ (?,?,?,?,?,?,?);
 """

@@ -2,11 +2,12 @@ import logging
 import sqlite3
 from functools import cached_property
 
+from config import db_path
 from session.queries import create_table, insert_data
 
 
 class BaseSession:
-    def __init__(self, db="mail"):
+    def __init__(self, db=db_path):
         self.__db = db
 
     @cached_property
@@ -32,10 +33,8 @@ class BaseSession:
         :param thread_id:
         :return:
         """
-        insert_query = insert_data.format(_id=_id, subject=subject, message=message,
-                                          _from=_from, _to=_to, received_at=received_at, thread_id=thread_id
-                                          )
-        return self.__client.execute(insert_query)
+        insert_query = insert_data
+        return self.__client.execute(insert_query, (_id, subject, message, _from, _to, received_at, thread_id))
 
     def query(self, query: str):
         """

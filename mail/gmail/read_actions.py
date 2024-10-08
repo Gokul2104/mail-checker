@@ -17,11 +17,19 @@ class GmailReadActions(ReadActions, Base):
         :param message_id:
         :return:
         """
-        pass
+        return self._service.users().messages().get(userId="me", id=message_id).execute()
 
     def get_messages(self):
         """
         return all emails from gmail
         :return:
         """
-        pass
+        # limiting to default limit of 10 email for this purpose
+        message = self._service.users().messages().list(userId="me", maxResults=10).execute()
+        for data in message["messages"]:
+            yield self.get_message(data['id'])
+
+
+
+
+
