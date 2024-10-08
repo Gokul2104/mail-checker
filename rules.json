@@ -16,10 +16,6 @@
     {
       "Type": "mark",
       "To": "unread"
-    },
-      {
-      "Type": "move",
-      "To": "HappyFox"
     }
       ]
   }
