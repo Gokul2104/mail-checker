@@ -8,11 +8,11 @@ from session.queries import create_table, insert_data
 
 class BaseSession:
     def __init__(self, db=db_path):
-        self.__db = db
+        self.__db =  sqlite3.connect(db)
 
     @cached_property
     def __client(self):
-        return sqlite3.connect(self.__db).cursor()
+        return self.__db.cursor()
 
     def create_table(self):
         """
@@ -33,8 +33,8 @@ class BaseSession:
         :param thread_id:
         :return:
         """
-        insert_query = insert_data
-        return self.__client.execute(insert_query, (_id, subject, message, _from, _to, received_at, thread_id))
+        return self.__client.execute(insert_data, (_id, subject, message, _from, _to, received_at, thread_id))
+
 
     def query(self, query: str):
         """
@@ -43,6 +43,9 @@ class BaseSession:
         :return:
         """
         return self.__client.execute(query)
+
+    def commit(self):
+        self.__db.commit()
 
     def __del__(self, *args, **kwargs):
         self.__client.close()

@@ -17,9 +17,9 @@ action_map = {
 
 
 class RuleEngine:
-    def __init__(self, rule):
+    def __init__(self, rule, session: BaseSession):
         self.__rule = rule
-        self.__session = BaseSession()
+        self.__session = session
 
     @property
     def apply(self):

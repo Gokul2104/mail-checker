@@ -3,25 +3,32 @@ from collections import defaultdict
 
 from mail import ReadActions, WriteActions
 from rule_engine.engine import RuleEngine, ActionEngine
+from session.base import BaseSession
 from tests import BaseTest
 
-
+session = BaseSession("test-mail")
 class TestRuleEngine(BaseTest):
 
     def test_001_check_or(self):
-        json_data = json.load(open("mock/rule1.json"))
-        engine = RuleEngine(json_data[0]['rule'])
+        fp = open("mock/rule1.json")
+        json_data = json.load(fp)
+        fp.close()
+        engine = RuleEngine(json_data[0]['rule'], session)
         expected_query = """select DISTINCT(thread_id) from mail_info where _from = 'gokul' or subject like '%interview%' or received_at < """
         self.assertEqual(expected_query, engine.generate_query()[:-10])
 
     def test_002_check_negative_or(self):
-        json_data = json.load(open("mock/rule1.json"))
-        engine = RuleEngine(json_data[1]['rule'])
+        fp = open("mock/rule1.json")
+        json_data = json.load(fp)
+        fp.close()
+        engine = RuleEngine(json_data[1]['rule'], session)
         self.assertRaises(ValueError, engine.generate_query)
 
     def test_003_check_not_or(self):
-        json_data = json.load(open("mock/rule1.json"))
-        engine = RuleEngine(json_data[2]['rule'])
+        fp = open("mock/rule1.json")
+        json_data = json.load(fp)
+        fp.close()
+        engine = RuleEngine(json_data[2]['rule'], session)
         expected_query = """select DISTINCT(thread_id) from mail_info where _from != 'gokul' or subject not like '%interview%'"""
         self.assertEqual(expected_query, engine.generate_query())
 
@@ -60,7 +67,9 @@ class MockWrite(WriteActions):
 class TestActionEngine(BaseTest):
     def test_001_mark_action(self):
         reader, writer = MockRead(), MockWrite()
-        json_data = json.load(open("mock/rule1.json"))
+        fp = open("mock/rule1.json")
+        json_data = json.load(fp)
+        fp.close()
         engine = ActionEngine(json_data[0]["action"], reader, writer)
         engine.execute([1, 2, 3])
         self.assertEqual(reader.called[reader.get_label.__name__], 1)
@@ -70,13 +79,17 @@ class TestActionEngine(BaseTest):
 
     def test_002_incorrect_action(self):
         reader, writer = MockRead(), MockWrite()
-        json_data = json.load(open("mock/rule1.json"))
+        fp = open("mock/rule1.json")
+        json_data = json.load(fp)
+        fp.close()
         engine = ActionEngine(json_data[1]["action"], reader, writer)
         self.assertRaises(AttributeError, engine.execute, [1, 2, 3])
 
     def test_003_mark_2_action(self):
         reader, writer = MockRead(), MockWrite()
-        json_data = json.load(open("mock/rule1.json"))
+        fp = open("mock/rule1.json")
+        json_data = json.load(fp)
+        fp.close()
         engine = ActionEngine(json_data[2]["action"], reader, writer)
         engine.execute([1, 2, 3])
         self.assertEqual(reader.called[reader.get_label.__name__], 2)

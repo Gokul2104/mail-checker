@@ -1,4 +1,5 @@
 from mail import GmailReadActions
+from rule_engine.engine import RuleEngine
 from session.base import BaseSession
 
 
@@ -27,6 +28,15 @@ def email_puller():
         session.create_table()
         session.insert(_id=message['id'], subject=subject, message=snippet, _from=_from, _to=_to, received_at=date,
                        thread_id=thread_id)
+        session.commit()
+
+
+def execute_actions(rules):
+    session = BaseSession()
+    for rule in rules:
+        rule_engine = RuleEngine(rule["rule"], session)
+        thread_ids = rule_engine.execute()
+        print(thread_ids)
 
 
 if __name__ == '__main__':
