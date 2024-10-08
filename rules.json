@@ -5,17 +5,16 @@
       "filter":[
 
         {
-          "Field": "Received At",
-          "Predicate": "greater than",
-          "Value": 1,
-          "Metrics": "months"
+          "Field": "Subject",
+          "Predicate": "contains",
+          "Value": "HappyFox"
         }
       ]
     },
     "action" :[
     {
-      "Type": "mark",
-      "To": "unread"
+      "Type": "move",
+      "To": "HappyFox"
     }
       ]
   }
