@@ -1,6 +1,17 @@
-from mail import GmailReadActions
-from rule_engine.engine import RuleEngine
+import json
+import sys
+import config
+from mail.gmail.read_actions import GmailReadActions
+from mail.gmail.write_actions import GmailWriteActions
+from rule_engine.engine import RuleEngine, ActionEngine
 from session.base import BaseSession
+
+
+class FactoryClass:
+    @classmethod
+    def get_class(cls, provider):
+        if provider == 'gmail':
+            return GmailReadActions(), GmailWriteActions()
 
 
 def email_puller():
@@ -31,13 +42,25 @@ def email_puller():
         session.commit()
 
 
-def execute_actions(rules):
+def execute_actions():
     session = BaseSession()
+    fp = open(config.rule_path)
+    rules = json.load(fp)
+    fp.close()
     for rule in rules:
         rule_engine = RuleEngine(rule["rule"], session)
         thread_ids = rule_engine.execute()
+        reader, writer = FactoryClass.get_class("gmail")
+        action_engine = ActionEngine(rule["action"], reader, writer)
         print(thread_ids)
+        action_engine.execute(thread_ids)
+        print(f"Applied Rule {rule['rule']}")
 
 
 if __name__ == '__main__':
-    email_puller()
+    if sys.argv[1] == "pull":
+        email_puller()
+    if sys.argv[1] == "rule":
+        execute_actions()
+
+

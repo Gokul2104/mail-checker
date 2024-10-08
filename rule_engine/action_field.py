@@ -38,9 +38,15 @@ class MarkAction(ActionField):
 
 
 class MoveAction(ActionField):
+    def __init__(self, data, reader: ReadActions, writer: WriteActions):
+        super().__init__(data, reader, writer)
+        self.__label_id = None
+
     def _validate(self):
-        if not self._r_provider.get_label(self.to):
+        self.__label_id = self._r_provider.get_label(self.to)
+        if not self.__label_id:
             raise ValueError("mentioned label not found")
 
     def _act(self, thread_ids: list):
-        self._w_provider.move_to_label(thread_ids, self.to)
+        print(self.__label_id)
+        self._w_provider.move_to_label(thread_ids, self.__label_id)

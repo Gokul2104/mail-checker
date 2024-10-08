@@ -1,5 +1,4 @@
 from mail import WriteActions
-from mail.read_actions import ReadActions
 from mail.gmail.base import Base
 
 
@@ -10,7 +9,10 @@ class GmailWriteActions(WriteActions, Base):
         :param thread_ids:
         :return:
         """
-        pass
+        batch = self._service.new_batch_http_request()
+        for thread_id in thread_ids:
+            batch.add(self._service.users().threads().modify(userId='me', id=thread_id, body={'removeLabelIds': ['UNREAD']}))
+        batch.execute()
 
     def mark_as_unread(self, thread_ids):
         """
@@ -18,7 +20,10 @@ class GmailWriteActions(WriteActions, Base):
         :param thread_ids:
         :return:
         """
-        pass
+        batch = self._service.new_batch_http_request()
+        for thread_id in thread_ids:
+            batch.add(self._service.users().threads().modify(userId='me', id=thread_id, body={'addLabelIds': ['UNREAD']}))
+        batch.execute()
 
     def move_to_label(self, thread_ids, label):
         """
@@ -27,4 +32,7 @@ class GmailWriteActions(WriteActions, Base):
         :param label:
         :return:
         """
-        pass
+        batch = self._service.new_batch_http_request()
+        for thread_id in thread_ids:
+            batch.add(self._service.users().threads().modify(userId='me', id=thread_id, body={'addLabelIds': [label]}))
+        batch.execute()
