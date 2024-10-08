@@ -64,15 +64,15 @@ class DateTimeField(FilterField):
             raise ValueError(f"Predicate should be one off {DateTimeFieldConstant.ALLOWED_PREDICATE}")
         if not isinstance(self.value, int):
             raise ValueError("Value Should be of type int")
-        if self.metrics in DateTimeFieldConstant.ALLOWED_UNIT:
+        if self.metrics not in DateTimeFieldConstant.ALLOWED_UNIT:
             raise ValueError(f"Unit should be one of {DateTimeFieldConstant.ALLOWED_UNIT}")
 
     def _generate_filter(self):
         ops = DateTimeFieldConstant.OPERATOR_MAP[self.predicate]
         timezone = pytz.timezone('UTC')
-        rel = {"day": self.value} if self.metrics == "day" else {"month": self.value}
+        rel = {"day": self.value} if self.metrics == "days" else {"month": self.value}
         st_dt = datetime.now(timezone) - relativedelta(**rel)
-        value = int(st_dt.timestamp())
+        value = int(st_dt.timestamp()*1000)
         db_data = f"{self.db_field} {ops} {value}"
         return db_data
 

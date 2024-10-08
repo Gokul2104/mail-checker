@@ -42,6 +42,7 @@ class RuleEngine:
                 raise AttributeError(f"Unsupported Field f{curr_filter['Field']}")
             base_query += field_cls(curr_filter).execute() + cond
         base_query = base_query.rsplit(cond, 1)[0]
+        print(base_query)
         return base_query
 
     def execute(self):

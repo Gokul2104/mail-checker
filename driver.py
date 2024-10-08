@@ -1,3 +1,4 @@
+import datetime
 import json
 import sys
 import config
@@ -26,7 +27,7 @@ def email_puller():
         subject = None
         _from = None
         _to = None
-        date = int(message['internalDate'])
+        date = None
         snippet = message['snippet']
         thread_id = message['threadId']
         for headers in message['payload']['headers']:
@@ -36,6 +37,9 @@ def email_puller():
                 _from = headers['value']
             if headers['name'] == 'To':
                 _to = headers['value']
+            if headers['name'] == 'Date':
+                date = int(datetime.datetime.strptime(headers["value"].rsplit(" (")[0], "%a, %d %b %Y %H:%M:%S %z").timestamp()*1000)
+
         session.create_table()
         session.insert(_id=message['id'], subject=subject, message=snippet, _from=_from, _to=_to, received_at=date,
                        thread_id=thread_id)

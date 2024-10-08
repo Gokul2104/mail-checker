@@ -12,7 +12,7 @@ class StringFieldConstant:
 class DateTimeFieldConstant:
     ALLOWED_FIELDS = ("Received At",)
     ALLOWED_PREDICATE = ("less than", "greater than")
-    ALLOWED_UNIT = ("month", "day")
+    ALLOWED_UNIT = ("months", "days")
     OPERATOR_MAP = {
         "less than": "<",
         "greater than": ">"

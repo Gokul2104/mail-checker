@@ -40,7 +40,7 @@ class GmailReadActions(ReadActions, Base):
         :return:
         """
         # limiting to default limit of 10 email for this purpose
-        message = self._service.users().messages().list(userId="me", maxResults=10).execute()
+        message = self._service.users().messages().list(userId="me", maxResults=50).execute()
         for data in message["messages"]:
             yield self.get_message(data['id'])
 

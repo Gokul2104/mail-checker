@@ -3,10 +3,12 @@
     "rule": {
       "apply": "any",
       "filter":[
+
         {
-          "Field": "Subject",
-          "Predicate": "contains",
-          "Value": "HappyFox"
+          "Field": "Received At",
+          "Predicate": "greater than",
+          "Value": 1,
+          "Metrics": "months"
         }
       ]
     },

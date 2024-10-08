@@ -55,7 +55,8 @@
           "Field": "Received At",
           "Predicate": "less than",
           "Value": 2,
-          "Metrics": "days"
+          "Metrics": "days",
+
         }
       ]
     },
